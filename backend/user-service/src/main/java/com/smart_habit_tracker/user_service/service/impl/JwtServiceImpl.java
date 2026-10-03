@@ -28,16 +28,18 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateToken(String email) {
+    public String generateToken(Long userId,String email) {
 
         Date now = new Date();
 
         return Jwts.builder()
                 .subject(email)
+                .claim("userId", userId)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + expiration))
                 .signWith(secretKey)
                 .compact();
+
     }
 
     @Override
@@ -60,5 +62,16 @@ public class JwtServiceImpl implements JwtService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public Long extractUserId(String token) {
+
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("userId", Long.class);
     }
 }
