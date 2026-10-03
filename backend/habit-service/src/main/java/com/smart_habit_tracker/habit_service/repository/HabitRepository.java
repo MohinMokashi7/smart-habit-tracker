@@ -3,6 +3,7 @@ package com.smart_habit_tracker.habit_service.repository;
 import com.smart_habit_tracker.habit_service.entity.Habit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,4 +20,10 @@ public interface HabitRepository extends JpaRepository<Habit, Long> {
             Long id,
             Long userId
     );
+    List<Habit> findDistinctByUserIdAndActiveTrueAndSchedulesDayOfWeek(
+            Long userId,
+            DayOfWeek dayOfWeek
+    );
+
+
 }
