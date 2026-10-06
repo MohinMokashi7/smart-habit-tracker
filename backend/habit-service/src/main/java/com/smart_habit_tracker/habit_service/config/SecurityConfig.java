@@ -31,8 +31,9 @@ public class SecurityConfig {
 
                 // Define which endpoints require authentication.
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/habits/**").authenticated()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/api/habits/**",
+                                "/actuator/health").permitAll()
+                        .anyRequest().authenticated()
                 )
 
                 // Run our JWT filter before Spring's username/password filter.
