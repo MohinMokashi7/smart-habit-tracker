@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "Smart Habit Tracker",
+    "slug": "smart-habit-tracker",
+    "scheme": "sht",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#060E09",
+    
+    "android": {
+      "package": "com.smarthabittracker.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#060E09"
+      }
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.smarthabittracker.app"
+    },
+    "plugins": [
+      "expo-secure-store",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      "expo-status-bar",
+      "expo-font"
+    ]
+  }
+}

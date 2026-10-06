@@ -177,8 +177,8 @@ public class HabitServiceImpl implements HabitService {
                 .orElseThrow(() ->
                         new RuntimeException("Habit not found"));
 
-        habitRepository.delete(existingHabit);
-    }
+        habitCompletionRepository.deleteAllByHabitId(id);
+        habitRepository.delete(existingHabit);    }
 
     @Override
     public List<TodayHabitResponse> getTodayHabits() {

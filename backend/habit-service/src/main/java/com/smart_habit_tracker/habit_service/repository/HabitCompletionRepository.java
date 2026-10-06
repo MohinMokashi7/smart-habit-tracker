@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface HabitCompletionRepository
         extends JpaRepository<HabitCompletion, Long> {
-
+    void deleteAllByHabitId(Long habitId);
     Optional<HabitCompletion> findByUserIdAndHabitIdAndCompletionDate(
             Long userId,
             Long habitId,
