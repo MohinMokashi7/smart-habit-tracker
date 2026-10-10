@@ -1,0 +1,11 @@
+.git
+.idea
+.vscode
+*.iml
+src/
+.mvn/
+mvnw
+mvnw.cmd
+pom.xml
+target/*
+!target/habit-service-0.0.1-SNAPSHOT.jar

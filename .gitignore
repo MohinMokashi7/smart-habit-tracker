@@ -18,3 +18,9 @@ Thumbs.db
 
 
 .vscode/
+
+# Local Docker environment secrets
+.env.docker
+
+# Local database backups
+/backups/

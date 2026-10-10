@@ -1,0 +1,79 @@
+
+
+services:
+
+  mysql:
+    image: mysql:8.0.43
+    container_name: sht-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - sht-mysql-data:/var/lib/mysql
+    networks:
+      - sht-network
+
+  eureka-server:
+    build:
+      context: ./backend/eureka-server
+    image: sht-eureka-server:1.0
+    container_name: sht-eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - sht-network
+
+  user-service:
+    build:
+      context: ./backend/user-service
+    image: sht-user-service:1.1
+    container_name: sht-user-service
+    env_file:
+      - .env.docker
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+    networks:
+      - sht-network
+
+  habit-service:
+    build:
+      context: ./backend/habit-service
+    image: sht-habit-service:1.0
+    container_name: sht-habit-service
+    env_file:
+      - .env.docker
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+    networks:
+      - sht-network
+
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+    image: sht-api-gateway:1.0
+    container_name: sht-api-gateway
+    env_file:
+      - .env.docker
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+      - user-service
+      - habit-service
+    networks:
+      - sht-network
+
+networks:
+  sht-network:
+    external: true
+    name: sht-network
+
+
+
+volumes:
+  sht-mysql-data:
+    name: sht-mysql-data
