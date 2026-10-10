@@ -12,6 +12,12 @@ services:
       - sht-mysql-data:/var/lib/mysql
     networks:
       - sht-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   eureka-server:
     build:
@@ -33,9 +39,13 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_started
+      mysql:
+        condition: service_healthy
     networks:
       - sht-network
+      
 
   habit-service:
     build:
@@ -47,7 +57,10 @@ services:
     ports:
       - "8083:8083"
     depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_started
+      mysql:
+        condition: service_healthy
     networks:
       - sht-network
 
