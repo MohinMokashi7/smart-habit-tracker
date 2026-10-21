@@ -73,7 +73,18 @@ services:
     networks:
       - sht-backend
       - sht-edge
-
+  nginx:
+    build:
+      context: ./nginx
+    image: sht-nginx:1.0
+    container_name: sht-nginx-prod
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - sht-edge
 volumes:
   sht-mysql-prod-data:
     name: sht-mysql-prod-data
