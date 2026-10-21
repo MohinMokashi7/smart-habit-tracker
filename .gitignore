@@ -15,7 +15,9 @@ Thumbs.db
 
 .env.*
 !.env.example
-
+!.env.prod.example
+.env.prod
+pass.txt
 
 .vscode/
 

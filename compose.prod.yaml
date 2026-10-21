@@ -1,0 +1,86 @@
+
+services:
+  mysql:
+    image: mysql:8.0.43
+    container_name: sht-mysql-prod
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - sht-mysql-prod-data:/var/lib/mysql
+    networks:
+      - sht-backend
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root --password=\"$${MYSQL_ROOT_PASSWORD}\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  eureka-server:
+    build:
+      context: ./backend/eureka-server
+    image: sht-eureka-server:2.0
+    container_name: sht-eureka-server-prod
+    restart: unless-stopped
+    networks:
+      - sht-backend
+
+  user-service:
+    build:
+      context: ./backend/user-service
+    image: sht-user-service:2.0
+    container_name: sht-user-service-prod
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    networks:
+      - sht-backend
+
+  habit-service:
+    build:
+      context: ./backend/habit-service
+    image: sht-habit-service:2.0
+    container_name: sht-habit-service-prod
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    networks:
+      - sht-backend
+
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+    image: sht-api-gateway:2.0
+    container_name: sht-api-gateway-prod
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    depends_on:
+      - eureka-server
+      - user-service
+      - habit-service
+    networks:
+      - sht-backend
+      - sht-edge
+
+volumes:
+  sht-mysql-prod-data:
+    name: sht-mysql-prod-data
+
+networks:
+  sht-backend:
+    name: sht-backend
+    internal: true
+  sht-edge:
+    name: sht-edge
