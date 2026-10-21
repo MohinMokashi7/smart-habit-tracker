@@ -22,7 +22,7 @@ services:
   eureka-server:
     build:
       context: ./backend/eureka-server
-    image: sht-eureka-server:1.0
+    image: sht-eureka-server:2.0
     container_name: sht-eureka-server
     ports:
       - "8761:8761"
@@ -32,7 +32,7 @@ services:
   user-service:
     build:
       context: ./backend/user-service
-    image: sht-user-service:1.1
+    image: sht-user-service:2.0
     container_name: sht-user-service
     env_file:
       - .env.docker
@@ -50,7 +50,7 @@ services:
   habit-service:
     build:
       context: ./backend/habit-service
-    image: sht-habit-service:1.0
+    image: sht-habit-service:2.0
     container_name: sht-habit-service
     env_file:
       - .env.docker
@@ -67,7 +67,7 @@ services:
   api-gateway:
     build:
       context: ./backend/api-gateway
-    image: sht-api-gateway:1.0
+    image: sht-api-gateway:2.0
     container_name: sht-api-gateway
     env_file:
       - .env.docker
