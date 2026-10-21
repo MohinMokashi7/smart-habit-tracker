@@ -65,7 +65,7 @@ services:
     container_name: sht-api-gateway-prod
     restart: unless-stopped
     env_file:
-      - .env.docker
+      - .env.prod
     depends_on:
       - eureka-server
       - user-service
